@@ -56,7 +56,7 @@ import com.mysql.cj.result.Field;
 public class BlobFromLocator implements java.sql.Blob {
     private List<String> primaryKeyColumns = null;
 
-    private List<String> primaryKeyValues = null;
+    private List<byte[]> primaryKeyValues = null;
 
     /** The ResultSet that created this BLOB */
     private ResultSetImpl creatorResultSet;
@@ -113,7 +113,7 @@ public class BlobFromLocator implements java.sql.Blob {
                     keyName.append(this.quotedId);
 
                     this.primaryKeyColumns.add(keyName.toString());
-                    this.primaryKeyValues.add(this.creatorResultSet.getString(i + 1));
+                    this.primaryKeyValues.add(this.creatorResultSet.getBytes(i + 1));
                 }
             }
         } else {
@@ -212,7 +212,7 @@ public class BlobFromLocator implements java.sql.Blob {
             pStmt.setBytes(1, bytesToWrite);
 
             for (int i = 0; i < this.numPrimaryKeys; i++) {
-                pStmt.setString(i + 2, this.primaryKeyValues.get(i));
+                pStmt.setBytes(i + 2, this.primaryKeyValues.get(i));
             }
 
             int rowsUpdated = pStmt.executeUpdate();
@@ -288,7 +288,7 @@ public class BlobFromLocator implements java.sql.Blob {
             pStmt = this.creatorResultSet.getConnection().prepareStatement(query.toString());
 
             for (int i = 0; i < this.numPrimaryKeys; i++) {
-                pStmt.setString(i + 1, this.primaryKeyValues.get(i));
+                pStmt.setBytes(i + 1, this.primaryKeyValues.get(i));
             }
 
             blobRs = pStmt.executeQuery();
@@ -356,7 +356,7 @@ public class BlobFromLocator implements java.sql.Blob {
             pStmt.setBytes(1, pattern);
 
             for (int i = 0; i < this.numPrimaryKeys; i++) {
-                pStmt.setString(i + 2, this.primaryKeyValues.get(i));
+                pStmt.setBytes(i + 2, this.primaryKeyValues.get(i));
             }
 
             blobRs = pStmt.executeQuery();
@@ -418,7 +418,7 @@ public class BlobFromLocator implements java.sql.Blob {
             pStmt = this.creatorResultSet.getConnection().prepareStatement(query.toString());
 
             for (int i = 0; i < this.numPrimaryKeys; i++) {
-                pStmt.setString(i + 1, this.primaryKeyValues.get(i));
+                pStmt.setBytes(i + 1, this.primaryKeyValues.get(i));
             }
 
             int rowsUpdated = pStmt.executeUpdate();
@@ -473,7 +473,7 @@ public class BlobFromLocator implements java.sql.Blob {
             pStmt.setInt(2, length);
 
             for (int i = 0; i < this.numPrimaryKeys; i++) {
-                pStmt.setString(i + 3, this.primaryKeyValues.get(i));
+                pStmt.setBytes(i + 3, this.primaryKeyValues.get(i));
             }
 
             blobRs = pStmt.executeQuery();
